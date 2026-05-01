@@ -28,3 +28,55 @@ let initialCards = [
 initialCards.forEach(function (card) {
   console.log(card.name);
 });
+
+const editProfile = document.querySelector(".profile__edit-button");
+const modalPopup = document.querySelector("#edit-popup");
+const closePopup = modalPopup.querySelector(".popup__close");
+let formElement = document.querySelector("#edit-profile-form");
+
+function openModal(modal) {
+  modal.classList.add("popup_is-opened");
+}
+
+function closeModal(modal) {
+  modal.classList.remove("popup_is-opened");
+}
+
+function fillProfileForm() {
+  const currentName = document.querySelector(".profile__title");
+  const currentDescription = document.querySelector(".profile__description");
+  const nameInput = modalPopup.querySelector(".popup__input_type_name");
+  const aboutInput = modalPopup.querySelector(".popup__input_type_description");
+
+  nameInput.value = currentName.textContent;
+  aboutInput.value = currentDescription.textContent;
+}
+
+function handleOpenEditModal() {
+  fillProfileForm();
+  openModal(modalPopup);
+}
+
+function handleProfileFormSubmit(evt) {
+  evt.preventDefault();
+
+  let nameInput = modalPopup.querySelector(".popup__input_type_name");
+  let aboutInput = modalPopup.querySelector(".popup__input_type_description");
+
+  let userName = nameInput.value;
+  let aboutUser = aboutInput.value;
+
+  let profileName = document.querySelector(".profile__title");
+  let descriptionName = document.querySelector(".profile__description");
+
+  profileName.textContent = userName;
+  descriptionName.textContent = aboutUser;
+  closeModal(modalPopup);
+}
+
+formElement.addEventListener("submit", handleProfileFormSubmit);
+editProfile.addEventListener("click", handleOpenEditModal);
+
+closePopup.addEventListener("click", function () {
+  closeModal(modalPopup);
+});
