@@ -42,6 +42,10 @@ const imagePopup = document.querySelector("#image-popup");
 const popupImage = imagePopup.querySelector(".popup__image");
 const popupCaption = imagePopup.querySelector(".popup__caption");
 const imagePopupClose = imagePopup.querySelector(".popup__close");
+const formInputs = Array.from(formElement.querySelectorAll("input"));
+const submitButton = formElement.querySelector(".button.popup__button");
+const newCardFormInputs = Array.from(newCardForm.querySelectorAll("input"));
+const newCardSubmitButton = newCardForm.querySelector(".button.popup__button");
 
 function openModal(modal) {
   modal.classList.add("popup_is-opened");
@@ -64,6 +68,7 @@ function fillProfileForm() {
 function handleOpenEditModal() {
   fillProfileForm();
   openModal(modalPopup);
+  toggleSubmitButton(formInputs.every((input) => validateInput(input)));
 }
 
 function handleProfileFormSubmit(evt) {
@@ -92,6 +97,8 @@ closePopup.addEventListener("click", function () {
 
 profileAddButton.addEventListener("click", function () {
   openModal(newCardPopup);
+  newCardForm.reset();
+  toggleSubmitButton(newCardFormInputs.every((input) => validateInput(input)));
 });
 profileCloseButton.addEventListener("click", function () {
   closeModal(newCardPopup);
@@ -108,6 +115,18 @@ imagePopup.addEventListener("click", function (event) {
     closeModal(imagePopup);
   }
 });
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    const activePopup = document.querySelector(".popup_is-opened");
+    if (activePopup) {
+      closeModal(activePopup);
+    }
+  }
+});
+
+newCardPopup.addEventListener("click", handleOverlayClick);
+modalPopup.addEventListener("click", handleOverlayClick);
 
 function getCardElement(
   name = "Sin título",
@@ -162,3 +181,55 @@ function handleCardFormSubmit(evt) {
   closeModal(newCardPopup);
   newCardForm.reset();
 }
+function getError(input) {
+  const errorSelector = "#" + input.name + "-error";
+  console.log("Buscando:", errorSelector);
+  console.log("Elemento encontrado:", document.querySelector(errorSelector));
+  const errorElement = document.querySelector(errorSelector);
+  return errorElement;
+}
+
+function showError(input) {
+  getError(input).textContent = input.validationMessage;
+}
+
+function hideError(input) {
+  getError(input).textContent = "";
+}
+
+function validateInput(input) {
+  if (!input.validity.valid) {
+    showError(input);
+  } else {
+    hideError(input);
+  }
+  return input.validity.valid;
+}
+
+function toggleSubmitButton(isValid) {
+  newCardSubmitButton.disabled = !isValid;
+}
+
+function toggleNewCardSubmitButton(isValid) {
+  newCardSubmitButton.disabled = !isValid;
+}
+
+function handleOverlayClick(event) {
+  if (event.target === event.currentTarget) {
+    closeModal(event.currentTarget);
+  }
+}
+
+formInputs.forEach((input) => {
+  input.addEventListener("input", () => {
+    toggleSubmitButton(formInputs.every((input) => validateInput(input)));
+  });
+});
+
+newCardFormInputs.forEach((input) => {
+  input.addEventListener("input", () => {
+    toggleNewCardSubmitButton(
+      newCardFormInputs.every((input) => validateInput(input)),
+    );
+  });
+});
