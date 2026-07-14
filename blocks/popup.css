@@ -121,7 +121,7 @@
   top: calc(100% + 10px);
   margin: 0;
 }
-.form__error {
+.popup__error {
   color: #ff0000;
   font-family: "Inter", Arial, sans-serif;
   font-weight: 400;

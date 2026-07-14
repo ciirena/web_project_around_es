@@ -98,7 +98,7 @@ closePopup.addEventListener("click", function () {
 profileAddButton.addEventListener("click", function () {
   openModal(newCardPopup);
   newCardForm.reset();
-  toggleSubmitButton(newCardFormInputs.every((input) => validateInput(input)));
+  toggleNewCardSubmitButton(false);
 });
 profileCloseButton.addEventListener("click", function () {
   closeModal(newCardPopup);
@@ -207,7 +207,7 @@ function validateInput(input) {
 }
 
 function toggleSubmitButton(isValid) {
-  newCardSubmitButton.disabled = !isValid;
+  submitButton.disabled = !isValid;
 }
 
 function toggleNewCardSubmitButton(isValid) {
