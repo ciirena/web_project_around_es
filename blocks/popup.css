@@ -169,4 +169,16 @@
     max-width: 75vw;
     padding: 0;
   }
+  .popup__input-error {
+    display: none;
+    color: red;
+    font-size: 12px;
+  }
+
+  .popup__input-error_active {
+    display: block;
+  }
+  .popup__input_type_error {
+    border: 1px solid #ff0000;
+  }
 }
