@@ -2,13 +2,14 @@ class Card {
   constructor(cardData, cardTemplate, handleClickOpenModal) {
     this.name = cardData.name;
     this.link = cardData.link;
-    this.cardTemplate = document.querySelector("#card-template");
+    this.cardTemplateSelector = cardTemplate;
     this.handleClickOpenModal = handleClickOpenModal;
   }
 
   _getElement() {
-    this.templateCard = this.cardTemplate.content;
-    this.cardElement = this.templateCard.cloneNode(true).firstElementChild;
+    this.templateCard = document.querySelector(this.cardTemplateSelector);
+    this.cardElement =
+      this.templateCard.content.cloneNode(true).firstElementChild;
     this.likeButton = this.cardElement.querySelector(".card__like-button");
     this.deleteButton = this.cardElement.querySelector(".card__delete-button");
     this.cardImage = this.cardElement.querySelector(".card__image");
