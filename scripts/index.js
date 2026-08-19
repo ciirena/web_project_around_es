@@ -1,8 +1,14 @@
-import { openModal, closeModal } from "./utils.js";
+import {
+  openModal,
+  closeModal,
+  handleOverlayClick,
+  handleCardFormSubmit,
+  handleProfileFormSubmit,
+} from "./utils.js";
 import Card from "./Card.js";
 import FormValidator from "./FormValidator.js";
 
-let initialCards = [
+const initialCards = [
   {
     name: "Valle de Yosemite",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
@@ -42,12 +48,15 @@ const imagePopup = document.querySelector("#image-popup");
 const popupImage = imagePopup.querySelector(".popup__image");
 const popupCaption = imagePopup.querySelector(".popup__caption");
 const imagePopupClose = imagePopup.querySelector(".popup__close");
-const formInputs = Array.from(formElement.querySelectorAll("input"));
-const submitButton = formElement.querySelector(".button.popup__button");
-const newCardFormInputs = Array.from(newCardForm.querySelectorAll("input"));
-const newCardSubmitButton = newCardForm.querySelector(".button.popup__button");
 const cardTemplate = "#card-template";
 const cardContainer = document.querySelector(".cards__list");
+
+const domElements = {
+  newCardForm,
+  cardTemplate,
+  cardContainer,
+  newCardPopup,
+};
 
 function fillProfileForm() {
   const currentName = document.querySelector(".profile__title");
@@ -62,24 +71,6 @@ function fillProfileForm() {
 function handleOpenEditModal() {
   fillProfileForm();
   openModal(modalPopup);
-  toggleSubmitButton(formInputs.every((input) => validateInput(input)));
-}
-
-function handleProfileFormSubmit(evt) {
-  evt.preventDefault();
-
-  const nameInput = modalPopup.querySelector(".popup__input_type_name");
-  const aboutInput = modalPopup.querySelector(".popup__input_type_description");
-
-  const userName = nameInput.value;
-  const aboutUser = aboutInput.value;
-
-  const profileName = document.querySelector(".profile__title");
-  const descriptionName = document.querySelector(".profile__description");
-
-  profileName.textContent = userName;
-  descriptionName.textContent = aboutUser;
-  closeModal(modalPopup);
 }
 
 formElement.addEventListener("submit", handleProfileFormSubmit);
@@ -92,7 +83,6 @@ closePopup.addEventListener("click", function () {
 profileAddButton.addEventListener("click", function () {
   openModal(newCardPopup);
   newCardForm.reset();
-  toggleNewCardSubmitButton(false);
 });
 profileCloseButton.addEventListener("click", function () {
   closeModal(newCardPopup);
@@ -132,46 +122,6 @@ function renderCard(cardData, cardTemplateSelector, cardContainer) {
 
 initialCards.forEach((card) => {
   renderCard(card, cardTemplate, cardContainer);
-});
-
-function handleCardFormSubmit(evt) {
-  evt.preventDefault();
-  const inputCardName = newCardForm.querySelector(
-    ".popup__input_type_card-name",
-  );
-  const inputImageLink = newCardForm.querySelector(".popup__input_type_url");
-  const cardData = { name: inputCardName.value, link: inputImageLink.value };
-  renderCard(cardData, cardTemplate, cardContainer);
-  closeModal(newCardPopup);
-  newCardForm.reset();
-}
-
-function toggleSubmitButton(isValid) {
-  submitButton.disabled = !isValid;
-}
-
-function toggleNewCardSubmitButton(isValid) {
-  newCardSubmitButton.disabled = !isValid;
-}
-
-function handleOverlayClick(event) {
-  if (event.target === event.currentTarget) {
-    closeModal(event.currentTarget);
-  }
-}
-
-formInputs.forEach((input) => {
-  input.addEventListener("input", () => {
-    toggleSubmitButton(formInputs.every((input) => validateInput(input)));
-  });
-});
-
-newCardFormInputs.forEach((input) => {
-  input.addEventListener("input", () => {
-    toggleNewCardSubmitButton(
-      newCardFormInputs.every((input) => validateInput(input)),
-    );
-  });
 });
 
 const formValidators = {};

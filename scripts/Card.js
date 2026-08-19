@@ -19,7 +19,8 @@ class Card {
   getNewCard() {
     const newCard = this._getElement();
     newCard.querySelector(".card__title").textContent = this.name;
-    newCard.querySelector(".card__image").setAttribute("src", this.link);
+    this.cardImage.setAttribute("src", this.link);
+    this.cardImage.setAttribute("alt", this.name);
 
     this._setEventListeners();
     return newCard;
